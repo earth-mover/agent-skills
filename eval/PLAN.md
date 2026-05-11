@@ -185,13 +185,23 @@ agent-skills/
     ├── pyproject.toml
     ├── README.md
     ├── .gitattributes
-    ├── harness.py                   # entry point
-    ├── sdk_loop.py                  # SDK plumbing
-    ├── persona.py                   # LLM persona side-channel
-    ├── redactor.py                  # secret redactor
-    ├── metrics/
-    │   ├── deterministic.py
-    │   └── judges.py
+    ├── icechunk_eval/                # Python package (named to avoid shadowing builtin `eval`)
+    │   ├── __init__.py
+    │   ├── harness.py                # entry point
+    │   ├── sdk_loop.py               # SDK plumbing
+    │   ├── persona.py                # LLM persona side-channel
+    │   ├── run_id.py                 # run-id generator + git introspection
+    │   ├── jsonl_store.py            # append/read runs.jsonl
+    │   ├── redactor.py               # secret redactor
+    │   ├── meta.py                   # pydantic models for meta.yaml / runs.jsonl row
+    │   └── metrics/
+    │       ├── deterministic.py
+    │       └── judges.py
+    ├── tests/
+    │   ├── test_run_id.py
+    │   ├── test_jsonl_store.py
+    │   ├── test_redactor.py
+    │   └── test_meta.py
     ├── fixtures/
     │   ├── era5-happy.yaml
     │   ├── inconsistent-dim.yaml

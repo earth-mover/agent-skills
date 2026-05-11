@@ -1,0 +1,3 @@
+* text=auto eol=lf
+runs/**/*.jsonl text
+runs/runs.jsonl text
