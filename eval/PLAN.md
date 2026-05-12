@@ -1,7 +1,7 @@
 # Eval Harness — Design Plan
 
-**Status:** design complete, scaffolding not yet started.
-**Last updated:** 2026-05-11
+**Status:** Phase 1 + most of Phase 2 landed. Live smoke run pending.
+**Last updated:** 2026-05-12
 
 ## Goal
 
@@ -137,8 +137,13 @@ Nested by category so new metrics can be added without disturbing existing keys.
   },
   "deterministic": {
     "time_s": 709.3,
-    "tokens": {"input": 12345, "output": 6789, "cache_read": 98765, "cache_write": 2345},
+    "tokens": {
+      "agent":   {"input": 12345, "output": 6789, "cache_read": 98765, "cache_write": 2345},
+      "persona": {"input": 234,   "output": 89,   "cache_read": 0,     "cache_write": 0}
+    },
     "skills_loaded": ["icechunk-datacube-ingestion/SKILL.md", "formats/HDF5.md"],
+    "num_turns": 12,
+    "total_cost_usd": 0.83,
     "coiled_cost_usd": 0.42
   },
   "checks": {
@@ -231,10 +236,10 @@ agent-skills/
 
 ### Phase 2 — minimal end-to-end loop
 
-3. SDK loop: spawn agent-under-test, persona side-channel, capture transcript.
-4. Cheap deterministic metrics: time, tokens, skills-loaded, xarray schema match.
-5. One happy-path netCDF fixture + persona brief.
-6. First green run appends a row to `runs.jsonl`.
+3. SDK loop: spawn agent-under-test, persona side-channel, capture transcript. **Landed.**
+4. Cheap deterministic metrics: time, tokens (agent + persona), skills_loaded, num_turns, total_cost_usd. **Landed.** Xarray schema match deferred to Phase 3.
+5. One happy-path netCDF fixture (`era5-happy`) + persona brief (`climate-scientist`). **Landed.** A `smoke` fixture is also included for plumbing-only runs that don't touch Arraylake.
+6. First green run appends a row to `runs.jsonl`. **Pending** — needs `ANTHROPIC_API_KEY` in env, and for `era5-happy`, the `earthmover-ingest-evals/era5-sample` Arraylake repo to exist.
 
 ### Phase 3 — judges and failure modes
 
@@ -245,7 +250,7 @@ agent-skills/
 ## Defaults
 
 - Python ≥3.11, `uv` for env/lockfile.
-- Agent-under-test model: Opus 4.7.
+- Agent-under-test model: Opus 4.7 (configured; SDK pin is `>=0.1.81`, will need bump once 0.2.x is on PyPI to use Opus 4.7 extended thinking properly).
 - Persona + judge model: Haiku 4.5, temperature 0.
 - Fixture Arraylake org/repo naming: TBD when scaffolding fixtures.
 

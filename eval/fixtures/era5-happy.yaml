@@ -1,0 +1,18 @@
+name: era5-happy
+description: |
+  Single small netCDF, happy-path ingestion. One variable (2-metre temperature),
+  small geographic region, ~10 timesteps. Exercises the standard non-virtual
+  ingestion path end-to-end.
+
+persona: climate-scientist
+
+arraylake:
+  source_org: earthmover-ingest-evals
+  source_repo: era5-sample
+  output_org: earthmover-ingest-evals
+  output_repo_template: "evals/icechunk-datacube-ingestion/{run_id}"
+
+agent_prompt: |
+  I'd like to ingest a small scientific dataset into an Icechunk repository using
+  the icechunk-datacube-ingestion skill. Please proceed; I'll answer any
+  questions you have about the dataset and my preferences.

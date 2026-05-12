@@ -1,0 +1,19 @@
+name: smoke
+description: |
+  Minimal plumbing check. Does not touch Arraylake or perform any real ingestion.
+  Verifies the SDK loop, persona side-channel, transcript capture, and runs.jsonl
+  write. Should complete with just ANTHROPIC_API_KEY in env.
+
+persona: minimal
+arraylake: {}
+
+agent_prompt: |
+  This is a harness smoke test. Do exactly the following and nothing more:
+
+  1. Use the AskUserQuestion tool to ask one question with header "Ack",
+     question text "Should I stop now?", and two options:
+     - "Stop": end the run
+     - "Continue": keep going
+  2. Whatever the user answers, acknowledge it in one short sentence and stop.
+
+  Do not read files. Do not run any other tools. Do not load any skill.
