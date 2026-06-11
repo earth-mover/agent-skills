@@ -144,6 +144,7 @@ Nested by category so new metrics can be added without disturbing existing keys.
     "skills_loaded": ["icechunk-datacube-ingestion/SKILL.md", "formats/HDF5.md"],
     "num_turns": 12,
     "total_cost_usd": 0.83,
+    "tool_errors": [],
     "coiled_cost_usd": 0.42
   },
   "checks": {
@@ -163,7 +164,8 @@ Nested by category so new metrics can be added without disturbing existing keys.
 Conventions:
 - **Not computed** → field absent (e.g. `coiled_cost_usd` on a run that didn't use Coiled).
 - **Computed, failed** → `{"value": null, "error": "..."}` (or `false` for booleans).
-- **Outcome**: `"pass"` if every required check + judge passes its threshold; `"fail"` otherwise. Required-set defined per fixture.
+- **Outcome**: `"pass"` if `ResultMessage.is_error` is false AND `deterministic.tool_errors` is empty; `"fail"` otherwise. (Phase 3 will extend this with per-fixture required-checks + judge thresholds.)
+- **`tool_errors`**: each entry `{tool_use_id, content}` captures any tool result block where `is_error=True`. Conservative v0 default — any tool failure flips outcome to fail. Phase 3 may add per-fixture allowlists (e.g. the "no-access" failure-mode fixture expects an auth error).
 
 ## Schema evolution
 

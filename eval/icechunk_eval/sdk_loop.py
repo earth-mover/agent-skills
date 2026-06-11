@@ -9,6 +9,7 @@ from claude_agent_sdk import (
     AssistantMessage,
     ClaudeAgentOptions,
     ResultMessage,
+    UserMessage,
     query,
 )
 from claude_agent_sdk.types import (
@@ -30,6 +31,7 @@ class AgentRunResult:
     is_error: bool
     num_turns: int
     total_cost_usd: float | None
+    tool_errors: list[dict[str, Any]]
 
 
 async def run_agent(
@@ -43,6 +45,7 @@ async def run_agent(
     transcript: list[dict[str, Any]] = []
     skills_loaded: list[str] = []
     tokens = {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0}
+    tool_errors: list[dict[str, Any]] = []
     final_result: str | None = None
     is_error = False
     num_turns = 0
@@ -86,6 +89,16 @@ async def run_agent(
                     path = (getattr(block, "input", None) or {}).get("file_path", "")
                     if _looks_like_skill_path(path):
                         skills_loaded.append(path)
+        elif isinstance(message, UserMessage):
+            blocks = message.content if isinstance(message.content, list) else []
+            for block in blocks:
+                if getattr(block, "is_error", False):
+                    tool_errors.append(
+                        {
+                            "tool_use_id": getattr(block, "tool_use_id", None),
+                            "content": str(getattr(block, "content", ""))[:500],
+                        }
+                    )
         elif isinstance(message, ResultMessage):
             if message.usage:
                 tokens["input"] += message.usage.get("input_tokens", 0) or 0
@@ -111,6 +124,7 @@ async def run_agent(
         is_error=is_error,
         num_turns=num_turns,
         total_cost_usd=total_cost_usd,
+        tool_errors=tool_errors,
     )
 
 

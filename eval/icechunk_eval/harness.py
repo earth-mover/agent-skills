@@ -60,6 +60,7 @@ def build_persona_context(fixture: dict[str, Any], rid: str) -> dict[str, str]:
 
 
 def build_row(rid: str, meta: RunMeta, result: Any, persona: Persona) -> dict[str, Any]:
+    outcome = "fail" if (result.is_error or result.tool_errors) else "pass"
     return {
         "schema_version": 1,
         "run_id": rid,
@@ -70,10 +71,11 @@ def build_row(rid: str, meta: RunMeta, result: Any, persona: Persona) -> dict[st
             "skills_loaded": result.skills_loaded,
             "num_turns": result.num_turns,
             "total_cost_usd": result.total_cost_usd,
+            "tool_errors": result.tool_errors,
         },
         "checks": {},
         "judges": {},
-        "outcome": "fail" if result.is_error else "pass",
+        "outcome": outcome,
     }
 
 
@@ -133,6 +135,7 @@ async def run(fixture_name: str) -> dict[str, Any]:
     print(f"  persona tokens:{persona.tokens}")
     print(f"  cost (agent):  ${row['deterministic']['total_cost_usd']}")
     print(f"  skills loaded: {len(result.skills_loaded)}")
+    print(f"  tool errors:   {len(result.tool_errors)}")
     print(f"  run dir:       {run_dir}")
     return row
 
