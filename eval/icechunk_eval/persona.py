@@ -4,15 +4,21 @@ import json
 import re
 from typing import Any
 
-from anthropic import AsyncAnthropic
+from claude_agent_sdk import (
+    AssistantMessage,
+    ClaudeAgentOptions,
+    ResultMessage,
+    query,
+)
 
 
 class Persona:
     """LLM-driven user simulation for AskUserQuestion.
 
-    Maintains its own conversation history so the agent's clarifying questions
-    build on each other (e.g. the agent asks for a doc URL, then later asks
-    whether the user wants virtual ingestion — the persona stays consistent).
+    Uses claude-agent-sdk (rather than the anthropic SDK directly) so the
+    persona rides Claude Code subscription auth alongside the agent under
+    test. Temporary workaround — see GitHub issue for the planned switch
+    back to the anthropic SDK once an ANTHROPIC_API_KEY is available.
     """
 
     def __init__(
@@ -22,33 +28,38 @@ class Persona:
     ) -> None:
         self.brief = brief
         self.model = model
-        self.client = AsyncAnthropic()
-        self.history: list[dict[str, Any]] = []
         self.transcript: list[dict[str, Any]] = []
         self.tokens = {"input": 0, "output": 0, "cache_read": 0, "cache_write": 0}
 
     async def answer(self, questions: list[dict[str, Any]]) -> dict[str, Any]:
         prompt = _format_questions(questions)
-        msg = await self.client.messages.create(
+        options = ClaudeAgentOptions(
             model=self.model,
-            max_tokens=2048,
-            system=self.brief,
-            messages=self.history + [{"role": "user", "content": prompt}],
-            temperature=0,
+            system_prompt=self.brief,
+            allowed_tools=[],
+            permission_mode="bypassPermissions",
         )
-        response_text = msg.content[0].text
-        answers = _parse_response(response_text)
 
-        self.history.append({"role": "user", "content": prompt})
-        self.history.append({"role": "assistant", "content": response_text})
+        response_text = ""
+        async for msg in query(prompt=prompt, options=options):
+            if isinstance(msg, AssistantMessage):
+                for block in msg.content:
+                    text = getattr(block, "text", None)
+                    if text:
+                        response_text += text
+            elif isinstance(msg, ResultMessage) and msg.usage:
+                self.tokens["input"] += msg.usage.get("input_tokens", 0) or 0
+                self.tokens["output"] += msg.usage.get("output_tokens", 0) or 0
+                self.tokens["cache_read"] += (
+                    msg.usage.get("cache_read_input_tokens", 0) or 0
+                )
+                self.tokens["cache_write"] += (
+                    msg.usage.get("cache_creation_input_tokens", 0) or 0
+                )
+
+        answers = _parse_response(response_text)
         self.transcript.append(
             {"questions": questions, "raw_response": response_text, "answers": answers}
-        )
-        self.tokens["input"] += msg.usage.input_tokens
-        self.tokens["output"] += msg.usage.output_tokens
-        self.tokens["cache_read"] += getattr(msg.usage, "cache_read_input_tokens", 0) or 0
-        self.tokens["cache_write"] += (
-            getattr(msg.usage, "cache_creation_input_tokens", 0) or 0
         )
         return answers
 

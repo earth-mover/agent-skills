@@ -53,9 +53,10 @@ Only option that gives both (a) the ability to simulate user responses to `AskUs
 
 One free-form persona brief per fixture (role + dataset facts + preferences). Persona LLM answers whatever the agent asks.
 
-- Persona model: Haiku 4.5, temperature 0.
+- Persona model: Haiku 4.5.
 - Slot-based scripting deferred — accept non-determinism in exchange for robustness to skill rephrasing.
 - If unscripted-question rate becomes a useful signal later, layer a slot system in front.
+- **Auth workaround**: persona currently uses `claude-agent-sdk` (not the `anthropic` SDK directly) so it rides Claude Code subscription auth alongside the agent-under-test. Tracked for revert in [issue #2](https://github.com/earth-mover/agent-skills/issues/2); switch back to `anthropic` SDK once `ANTHROPIC_API_KEY` is in env (faster + simpler).
 
 ### Fixtures: Arraylake-managed source data
 
