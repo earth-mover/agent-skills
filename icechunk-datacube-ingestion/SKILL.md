@@ -14,6 +14,7 @@ This goal will be achieved once the user has succesfully created a single Icechu
 - [ ] Single Icechunk / Arraylake store (not multiple stores - instead prefer multiple groups in the same store),
 - [ ] Simple datacube structure,
 - [ ] Contains the correct data values,
+- [ ] Has appropriate metadata (e.g. CF conventions or GeoZarr),
 - [ ] Contains all the requested data,
 - [ ] Is efficient to open and access.
 
