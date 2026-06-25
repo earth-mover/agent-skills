@@ -68,7 +68,7 @@ In order, you must:
         Concat dimension: time
         → Final dataset: Dataset with dims (time: 4, step: 209, lat: 405, lon: 2161)
 
-5. [ ] **Check assumptions and requirements** - for example check that the various files actually do follow the expected `pandera.xarray` schema.
+5. [ ] **Check assumptions and requirements** - for example check that the various files actually do follow the expected `pandera.xarray` schema. The [VirtualiZarr documentation on declarative schema validation](https://virtualizarr.readthedocs.io/en/stable/how_to/validation.html) is useful here.
 6. [ ] **Execute ingestion** - First try ingesting a small representative subset of the files. Start by creating an new Arraylake repo in an org and with a name of the user's choosing. Read the files, concatenating, and write to the Arraylake repo. Then scale up the same pattern using Dask. Check with the user before deploying any dask clusters. 
 7. [ ] **Validate success** - Assert that loading data directly from one of the original files using Xarray gives the same result as loading the equivalent subset of data from the resultant Icechunk store (again using xarray).
 
@@ -78,7 +78,6 @@ Only move on once the previous step has been verified as completed.
 When a step has been completed, keep track in a `INGESTION-PROGRESS.md` planning file.
 This is also a good place for notes on discoveries about the data, and useful to potentially hand off or resume by another agent later.
 Check if such a file already exists in the current directory using `bash read ./INGESTION-PROGRESS.md`.
-
 
 ### Iteration
 
