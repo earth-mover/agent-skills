@@ -25,6 +25,7 @@ This goal will be achieved once the user has succesfully created a single Icechu
 To achieve this goal the user MUST install the following python packages: `icechunk`, `zarr`, and `xarray`. 
 They will likely also need to install further packages to read specific file formats (e.g. `h5netcdf` to read netCDF4 files).
 If they want to do virtual ingestion they will need to install `VirtualiZarr`, and if they want to use Arraylake they will need to install the arraylake python client.
+Remember that virtual ingestion into Arraylake requires configuring an appropriate "Virtual Chunk Access Policy".
 
 ### Supported file formats
 
