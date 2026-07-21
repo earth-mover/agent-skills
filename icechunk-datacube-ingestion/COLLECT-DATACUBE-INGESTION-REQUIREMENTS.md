@@ -27,11 +27,17 @@ Ask the user:
 
 "Do you want to try ingesting the data as virtual references or as native chunks? Virtual references do not require copying the original data files, but do depend on those original files being left untouched. Native chunks creates a standalone Icechunk store."
 
+Remember the answer - it constrains what's askable/answerable in every later step, especially schema requirements below.
+
 ## Schema requirements?
 
 Ask the user:
 
 "Do you have any preferences for how you want to organize the resultant data?"
+
+**If virtual was chosen above**, scope this question to logical organization only: variable/group layout, dimension order, how files map to the concat dimension. Do NOT ask about chunk size, chunk shape, or rechunking - virtual references inherit chunking directly from the source files as-is, and changing it would require materializing (native) chunks instead. If the user brings up chunking anyway, tell them that's a native-ingestion concern and confirm whether they want to switch from virtual to native before continuing.
+
+**If native was chosen**, chunk size/shape questions are in scope, alongside the logical organization questions above.
 
 ## Query patterns?
 
