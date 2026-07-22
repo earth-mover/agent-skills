@@ -41,7 +41,9 @@ Ask the user:
 
 ## Query patterns?
 
-Ask the user:
+**Skip this question entirely if virtual was chosen above.** Query patterns only matter when they can inform a chunking decision, and virtual references inherit chunking as-is from the source files - there's nothing to act on. Go straight to "User resources?".
+
+**If native was chosen**, ask the user:
 
 "How do you expect users of your resulting data store to query the data? e.g. timeseries queries? global maps? ensemble statistics?"
 
