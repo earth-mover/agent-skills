@@ -43,6 +43,10 @@ If the user, dataset documentation, or your bucket scan mentions any of these fi
 
 If you suspect the data is in any other format not in this list, read [./formats/UNSUPPORTED-FILE-FORMAT.md](./formats/UNSUPPORTED-FILE-FORMAT.md).
 
+### Forecast Model Run Collections (FMRC)
+
+If the user wants the resulting datacube structured as a **Forecast Model Run Collection** (FMRC) — e.g. so it can be sliced with [rolodex](https://github.com/dcherian/rolodex) into BestEstimate/ConstantForecast/ConstantOffset views — or the source data is forecast model output where each file/group is one model run followed by a sequence of forecast lead times, read [./FMRC.md](./FMRC.md) before planning the concat dimension in step 4 below.
+
 ## Order of operations
 
 This is a complex task consisting of multiple steps which MUST be performed in order.
@@ -68,6 +72,8 @@ In order, you must:
         Files found: 4 files (4 model runs for a single day)
         Concat dimension: time
         → Final dataset: Dataset with dims (time: 4, step: 209, lat: 405, lon: 2161)
+
+    If each file is a forecast model run rather than a plain time slice (see [FMRC](#forecast-model-run-collections-fmrc) above), the concat dimension is the run's reference time, not a shared `time` coordinate already present in each file — read [./FMRC.md](./FMRC.md) for how to derive it.
 
 5. [ ] **Check assumptions and requirements** - for example check that the various files actually do follow the expected `pandera.xarray` schema. The [VirtualiZarr documentation on declarative schema validation](https://virtualizarr.readthedocs.io/en/stable/how_to/validation.html) is useful here.
 6. [ ] **Execute ingestion** - First try ingesting a small representative subset of the files. Start by creating an new Arraylake repo in an org and with a name of the user's choosing. Read the files, concatenating, and write to the Arraylake repo. Then scale up the same pattern using Dask. Check with the user before deploying any dask clusters. 
