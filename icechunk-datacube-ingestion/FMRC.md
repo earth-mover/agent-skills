@@ -24,11 +24,6 @@ Every (`time`, `step`) cell's actual valid timestamp is `time + step`. This is t
 
 Read rolodex's docs/README for the exact indexing recipe once the store exists — this skill only covers getting the data into the right shape.
 
-## When to use this
-
-Trigger this whenever the source data is forecast model output where **each file (or each group of files) represents one model run**: a single initialization time, followed by a sequence of forecast steps/lead times. Common tells: filenames or folder structure keyed by run date/hour, a `step`/`forecast_hour` dimension already in the file, GRIB/NetCDF output from NWP models (SHYFEM, WRF, GFS, HRRR, ...), or the user explicitly asking for an FMRC / mentioning rolodex / BestEstimate.
-
-This is orthogonal to virtual vs. native ingestion and to file format — read the relevant [format doc](./SKILL.md#supported-file-formats) first for how to open the files, then apply this reshaping before concatenation.
 
 ## Two source shapes, two strategies
 
