@@ -26,7 +26,3 @@ vds = open_virtual_dataset(
 )
 ```
 
-
-    coords="minimal", compat="override", combine_attrs="override",
-)
-```
