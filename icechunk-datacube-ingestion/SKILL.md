@@ -39,7 +39,6 @@ If the user, dataset documentation, or your bucket scan mentions any of these fi
 - **TIFF/GeoTIFF/COG** - Read [./formats/TIFF.md](./formats/TIFF.md).
 - **GRIB** - Read [./formats/GRIB.md](./formats/GRIB.md).
 - **Kerchunk** - (Including "Kerchunk JSON" or "Kerchunk Parquet".) Read [./formats/KERCHUNK.md](./formats/KERCHUNK.md).
-- **Parquet** - Read [./formats/PARQUET.md](./formats/PARQUET.md).
 
 If you suspect the data is in any other format not in this list, read [./formats/UNSUPPORTED.md](./formats/UNSUPPORTED.md).
 
