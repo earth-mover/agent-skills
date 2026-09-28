@@ -76,7 +76,7 @@ In order, you must:
     If each file is a forecast model run rather than a plain time slice (see [FMRC](#forecast-model-run-collections-fmrc) above), the concat dimension is the run's reference time, not a shared `time` coordinate already present in each file — read [./FMRC.md](./FMRC.md) for how to derive it.
 
 5. [ ] **Check assumptions and requirements** - for example check that the various files actually do follow the expected `pandera.xarray` schema. The [VirtualiZarr documentation on declarative schema validation](https://virtualizarr.readthedocs.io/en/stable/how_to/validation.html) is useful here.
-6. [ ] **Execute ingestion** - First try ingesting a small representative subset of the files. Start by creating an new Arraylake repo in an org and with a name of the user's choosing. Read the files, concatenating, and write to the Arraylake repo. Then scale up the same pattern using Dask. Check with the user before deploying any dask clusters. 
+6. [ ] **Execute ingestion** - First try ingesting a small representative subset of the files. Start by creating an new Arraylake repo in an org and with a name of the user's choosing. Read the files, concatenating, and write to the Arraylake repo. (You may need to extract data from the filepath to use as coordinate values - use the `preprocess` kwarg and xarray's `ds.attrs["source"]` to access the filepath.) Then scale up the same pattern using Dask. Check with the user before deploying any dask clusters. 
 7. [ ] **Validate success** - Assert that loading data directly from one of the original files using Xarray gives the same result as loading the equivalent subset of data from the resultant Icechunk store (again using xarray).
 
 ### Recording progress
