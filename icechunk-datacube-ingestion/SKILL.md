@@ -41,7 +41,7 @@ If the user, dataset documentation, or your bucket scan mentions any of these fi
 - **Kerchunk** - (Including "Kerchunk JSON" or "Kerchunk Parquet".) Read [./formats/KERCHUNK.md](./formats/KERCHUNK.md).
 - **Parquet** - Read [./formats/PARQUET.md](./formats/PARQUET.md).
 
-If you suspect the data is in any other format not in this list, read [./formats/UNSUPPORTED-FILE-FORMAT.md](./formats/UNSUPPORTED-FILE-FORMAT.md).
+If you suspect the data is in any other format not in this list, read [./formats/UNSUPPORTED.md](./formats/UNSUPPORTED.md).
 
 ### Forecast Model Run Collections (FMRC)
 
